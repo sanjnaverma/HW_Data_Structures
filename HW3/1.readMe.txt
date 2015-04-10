@@ -1,0 +1,58 @@
+readMe.txt
+
+Sanjna Verma sv1058 3/10
+
+FYI: No packages needed, everything should that is in the zip file was used to complete the HW assignment (double checked with Diego). 
+There are no underFlow/overFlow exceptions because of time restraints—> Diego and Prof 
+Korth are aware of a heavy midterm load. if more time, there would be stack under and overflow constraints and if the array stack size was at capacity, it would catch that and increase the stack size. (PT 3) 
+
+Parts 1 and 2: LLHomeworkFunctions
+equalLists method evaluates if the lists are equal, there are comments in the methods that helped me debug and 
+formulate the method
+
+method 'terminates' evaluates if circular, comments also in code while i was debugging
+
+
+Part3: thought process
+Can use an arraystack (discovered during office hours on monday with Diego)
+
+elementary thought process: (lots of classes to keep track of)
+
+There are 4 classes:
+MaxStack<T>
+LLNode<T>
+SlowMaxStack<T>
+FastMaxStack<T> (Written by you)
+
+There is 1 interface:
+Maximizer<T>
+
+And an additional class that you must write that will determine the type (that is, will determine what T is (Integer, String, Double, etc...)
+<name-you-choose> implements Maximizer< type-you-choose >
+
+Notice that this last class is not really generic, but uses the generic interface Maximizer. You cannot pass in a T; you have to specify the type.
+
+Now, assuming that you have all of the above, the way you would test it may be the following:
+
+First, suppose that the last class has the following signature:
+
+public IntMax implements Maximizer<Integer> { .... }     //This class will have the methods getMax(Integer t1, Integer t2) and getGlobalMin()
+
+
+Then in your main class you can do the following:
+
+IntMax max = new IntMax();       --> Instantiates an object of type IntMax
+SlowMaxStack<Integer> stack = new SlowMaxStack<Integer>(max);   --> Uses the IntMax object as a parameter
+
+Now we push the stack:
+
+stack.push(10);     //Please see my email about the bug in the push() method
+stack.push(20);     //of SlowMaxStack.
+stack.push(100);
+stack.push(30);
+stack.push(25);
+
+Now if you call 
+System.out.println(stack.getMaxSoFar());
+
+you should see that it prints 100.

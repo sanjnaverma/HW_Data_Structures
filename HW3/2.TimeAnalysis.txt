@@ -1,0 +1,16 @@
+Sanjna Verma [sv1058] Time Analysis
+
+Part 1
+The equalLists method that I have written is an O(N^2) operation. The reason for this is because I have two loops that essentially run through two lists based of the conditional statements I have in place
+
+
+Part 2
+The terminate method that I have written is an O(N) operation. It compares the current node and the following node to determine if there is recursive repetition, therefore only needing to traverse the list once. 
+
+
+
+Part 3
+
+slowMaxStack : O(N) is the time operation because you must traverse the list once in order to find the max.
+
+fastMaxStack : pop, push, and the getMaxSoFar are constant operations therefore in fastMaxStack, the time operation is O(1)
