@@ -26,3 +26,8 @@ HuffmanTree-------
     */
 
     
+The heap's role is basically to help you organize the HuffmanNodes in ascending order. By building a heap, you are guaranteeing that the HuffmanNode with least frequency will be at the top. This way, when you use deleteMin() or getMin() you will know that you are extracting the node with least frequency.
+
+The fileToHeap() method will create the heap by creating a new HeapNode and inserting it into the binary heap.
+
+The createFromHeap() method will use the heap (as I described above) to create the Huffman Tree.
