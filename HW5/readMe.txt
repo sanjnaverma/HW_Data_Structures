@@ -8,6 +8,13 @@ BinaryHeap.java
 HuffmanConverter.java
 HuffmanNode.java
 
+
+PROBLEMS: 
+Huffman code reads the “a” has “nullA” and runs a nullpointerexception. However, other files run the same results. If i solve it before hand, I will send another submission and take one of my 5 days. 
+
+Thanks, 
+Sanjna
+
 HuffmanTree-------
 	/**
     * public static BinaryHeap fileToHeap(String filename) 

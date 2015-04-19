@@ -54,7 +54,7 @@ public class BinaryHeap<AnyType extends Comparable<? super AnyType>>
         int i = 1;
         for( AnyType item : items )
             array[ i++ ] = item;
-        buildHeap( );
+        buildHeap();
 	}
       
    // - use code provided in class except:
