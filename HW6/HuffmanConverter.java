@@ -262,24 +262,24 @@ private char[] charArray;
 	 
 	 for (int i = 0; i < encodedStr.length(); i++) {
 	 	if(encodedStr.charAt(i) == '0') {
-	 	if(r.left != null ) {
-	 	r = r.left;
-	 }
-	 	else {
-	 		decoded += r.letter;
-	 		r = this.huffmanTree.root;
-	  	}
-	  	}
+	 		if(r.left != null ) {
+	 			r = r.left;
+	 		}
+		 	else {
+		 		decoded += r.letter;
+		 		r = this.huffmanTree.root;
+		  	}
+	 	}
 	  	else if (encodedStr.charAt(i) == '1'){ //encodedStr.charAt(i) == '1'
-	  	if (r.right != null) {
-	  	r = r.right;
+	  		if (r.right != null) {
+	  				r = r.right;
+	  		}
+	  		else {
+	  				decoded += r.letter;
+	  				r = this.huffmanTree.root;
+	  		}
 	  	}
-	  	else {
-	  	decoded += r.letter;
-	 	r = this.huffmanTree.root;
-	  	}
-	  	}
-	  	}
+	 }
 	  	return decoded;
   }  
 //  public String decodeMessage(String encodedStr) {	  
