@@ -65,6 +65,8 @@ public class HuffmanConverter {
  
   // stores the # of unique chars in contents
   private int uniqueChars = 0; //(optional)
+
+private char[] charArray;
  
   /** Constructor taking input String to be converted */
   public HuffmanConverter(String input)
@@ -79,7 +81,12 @@ public class HuffmanConverter {
    * message occurs...
    * I.e., we use 'contents' to fill up the count[] list...
    */
+  
   public void recordFrequencies() {
+	  for(int i = 0; i < contents.length(); i++)
+	  count[(int) contents.charAt(i)]++;
+}
+/*  public void recordFrequencies() {
 	  /**
 	   * 1) Convert contents to characters
 	   * 2) Store characters in array
@@ -87,25 +94,31 @@ public class HuffmanConverter {
 	   * 4) increment the count at index of integer value of that specific character
 	   * 5) count number of unique characters 
 	   * 6) update this.uniqueChars 
-	   */
-	  char[] contentsChar = this.contents.toCharArray();
-	  for (int i = 0; i <contentsChar.length; i++) {
-		  //System.out.println(contentsChar[i]);
-		  char c = contentsChar[i];
-		  if((int)c < this.count.length) {
-			  this.count[(int)c]++;
-			  //System.out.println("Count:"+count.length);//should stay at 256
-			  System.out.println("c: "+(c+""));
-		  }
-	  }
+	   
+//	  char[] contentsChar = this.contents.toCharArray();
+//	  for (int i = 0; i <contentsChar.length; i++) {
+//		  //System.out.println(contentsChar[i]);
+//		  char c = contentsChar[i];
+//		  if((int)c < this.count.length) {
+//			  this.count[(int)c]++;
+//			  //System.out.println("Count:"+count.length);//should stay at 256
+//			  System.out.println("c: "+(c+""));
+//		  }
+//	  }
+//	  
+//	  for (int j= 0; j< count.length; j++) {
+//		  if(count[j] != 0) {
+//			  this.uniqueChars++;
+//		  }
+//	  }
+//	  System.out.println("unique chars: "+ uniqueChars); 
 	  
-	  for (int j= 0; j< count.length; j++) {
-		  if(count[j] != 0) {
-			  this.uniqueChars++;
-		  }
+	  this.charArray = contents.toCharArray();
+	  for (int i = 0 ;i < charArray.length; i++) {
+		  int c = (int)this.charArray[i];
+		  this.count[c] +=1;
 	  }
-	  System.out.println("unique chars: "+ uniqueChars); 
-  }
+  }*/
  
   /**
    * Converts our frequency list into a Huffman Tree. We do this by
@@ -128,28 +141,20 @@ public class HuffmanConverter {
 	   * 6) create a huff node at that nodeindex (aka the second counter)
 	   * 	use parameters create above
 	   */
-	  HuffmanNode[] letters = new HuffmanNode[this.uniqueChars];
-	  int i = 0;
-	  int nodeIndex = 0;
-	  while (i <count.length) {
-		  if(this.count[i] != 0) {
-			 // char ch = (char) i;
-			 // Character o = (Character) ch;
-			  Character o = (Character)((char)i);
-			  
-			  String l = o.toString(); //param 1
-			  //double lc = (double) count[i];
-			  //Double freq = (double) lc;
-			  Double freq = (double)((double)count[i]); //param2
-			  letters[nodeIndex] = new HuffmanNode(l, freq);
-			  
-			  
-		  } i++;
+	  HuffmanNode[] letters = new HuffmanNode[this.uniqueChars +1];
+	  
+	  int j = 0;
+	  for ( int i = 0; i <count.length; i++) {
+		  if(count[i] != 0) {
+			  letters[j] = new HuffmanNode(""+(char)i, Double.parseDouble(""+ count[i]));
+			  j++;
+		  }
 	  }
 	  
+	  BinaryHeap<HuffmanNode> bheap = new BinaryHeap<HuffmanNode>(letters);
+	  System.out.println(bheap);
 	  
-	  BinaryHeap heap = new BinaryHeap (letters);
-	  this.huffmanTree = huffmanTree.createFromHeap(heap);
+	  this.huffmanTree = huffmanTree.createFromHeap(bheap);
   }
  
   /**
@@ -204,20 +209,17 @@ public class HuffmanConverter {
    * (a String of 0's and 1's), and return it...
    */
   public String encodeMessage() {
-	  
-	  String encoded = ""; //final message. will be returned
-	  String[] eMessage = new String[this.contents.length()];
-	  int i = 0;
-	  while (i <this.contents.length()) {
-		  int m = (int) this.contents.charAt(i);
-		  eMessage[i] = code[m];
-		  encoded = encoded + eMessage[i];
-		  i++;
-	  }
-	  
-	 
-	  
-	  return encoded; 
+	  /**
+	   * So the for loop goes through each character of “contents” uptil 
+	   * contents.length() and the index to each is (int) contents.charAt(i) s
+	   * o the huffman value of each character is code[(int)contents.charAt(i)]
+	   */
+	  String encoded = "";
+	 for (int i = 0; i <this.count.length; i++) {
+		 encoded += code[(int) contents.charAt(i)];
+		 
+	 }
+	 return encoded;
   }
  
   /**
@@ -241,7 +243,7 @@ public class HuffmanConverter {
 		   else {
 			   fileString += line;
 		   }
-		   System.out.println(line);
+		   System.out.print(line);
 	  }
 	  return fileString;
 	//return filename;
@@ -253,27 +255,59 @@ public class HuffmanConverter {
    * re-create the original message from our
    * huffman encoding and return it...
    */
+  
   public String decodeMessage(String encodedStr) {
-	  HuffmanNode r = this.huffmanTree.root; //get the root
-	  String output = "";
-	  
-	  
-	  for (int i = 0; i < encodedStr.length(); i++) {
-		  if(encodedStr.charAt(i) == '0') {
-			  if(r.left != null ) {
-				  r = r.left;
-			  }
-		  }
-		  else { //encodedStr.charAt(i) == '1'
-			  if (r.right != null) {
-				  r = r.right;
-			  }
-		  }
-		  output+= r;
-	  }
-	  
-	  return output;
-  }
+	 HuffmanNode r = this.huffmanTree.root; //get the node
+	 String decoded = "";
+	 
+	 for (int i = 0; i < encodedStr.length(); i++) {
+	 	if(encodedStr.charAt(i) == '0') {
+	 	if(r.left != null ) {
+	 	r = r.left;
+	 }
+	 	else {
+	 		decoded += r.letter;
+	 		r = this.huffmanTree.root;
+	  	}
+	  	}
+	  	else if (encodedStr.charAt(i) == '1'){ //encodedStr.charAt(i) == '1'
+	  	if (r.right != null) {
+	  	r = r.right;
+	  	}
+	  	else {
+	  	decoded += r.letter;
+	 	r = this.huffmanTree.root;
+	  	}
+	  	}
+	  	}
+	  	return decoded;
+  }  
+//  public String decodeMessage(String encodedStr) {	  
+//	  HuffmanNode r = this.huffmanTree.root; //get the node
+//	  String decoded = "";
+//	  
+//	  for (int i = 0; i < encodedStr.length(); i++) {
+//		  if(encodedStr.charAt(i) == '0') {
+//			  if(r.left != null ) {
+//				  r = r.left;
+//			  }
+//			  else {
+//				  decoded += r.letter;
+//				  r = r.left;
+//			  }
+//		  }
+//		  else if (encodedStr.charAt(i) == '1'){ //encodedStr.charAt(i) == '1'
+//			  if (r.right != null) {
+//				  r = r.right;
+//			  }
+//			  else {
+//				  decoded += r.letter;
+//				  r = r.right;
+//			  }
+//		  }
+//	  }
+//	  return decoded;
+ // }
  
   /**
    * Uses args[0] as the filename, and reads in its contents. Then
@@ -283,10 +317,10 @@ public class HuffmanConverter {
    * NOTE: Example method provided below...
  * @throws IOException 
    */
-  public static void main(String args[]) throws IOException
+  public static void main(String[] args) throws IOException
   {
     //call all your methods from here
-	  BufferedReader in = new BufferedReader(new FileReader("huff.txt"));
+	  BufferedReader in = new BufferedReader(new FileReader("poem.txt"));
 	   String fileString = "";
 	   while(true) {
 		   String line = in.readLine();
@@ -296,7 +330,7 @@ public class HuffmanConverter {
 		   else {
 			   fileString += line;
 		   }
-		   System.out.println(line);
+		   System.out.print(line);
 	   }
 	  
 		 HuffmanConverter converter = new HuffmanConverter(fileString);
