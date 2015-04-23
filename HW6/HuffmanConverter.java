@@ -86,39 +86,7 @@ private char[] charArray;
 	  for(int i = 0; i < contents.length(); i++)
 	  count[(int) contents.charAt(i)]++;
 }
-/*  public void recordFrequencies() {
-	  /**
-	   * 1) Convert contents to characters
-	   * 2) Store characters in array
-	   * 3) loop through array
-	   * 4) increment the count at index of integer value of that specific character
-	   * 5) count number of unique characters 
-	   * 6) update this.uniqueChars 
-	   
-//	  char[] contentsChar = this.contents.toCharArray();
-//	  for (int i = 0; i <contentsChar.length; i++) {
-//		  //System.out.println(contentsChar[i]);
-//		  char c = contentsChar[i];
-//		  if((int)c < this.count.length) {
-//			  this.count[(int)c]++;
-//			  //System.out.println("Count:"+count.length);//should stay at 256
-//			  System.out.println("c: "+(c+""));
-//		  }
-//	  }
-//	  
-//	  for (int j= 0; j< count.length; j++) {
-//		  if(count[j] != 0) {
-//			  this.uniqueChars++;
-//		  }
-//	  }
-//	  System.out.println("unique chars: "+ uniqueChars); 
-	  
-	  this.charArray = contents.toCharArray();
-	  for (int i = 0 ;i < charArray.length; i++) {
-		  int c = (int)this.charArray[i];
-		  this.count[c] +=1;
-	  }
-  }*/
+
  
   /**
    * Converts our frequency list into a Huffman Tree. We do this by
@@ -128,7 +96,7 @@ private char[] charArray;
    * HuffmanTree.heapToTree() method to get our much desired
    * HuffmanTree object, which we store as huffmanTree.
    */
-  public void frequenciesToTree() {
+  public void frequenciesToTree() throws UnderflowException{
 	  /**
 	   * 1) create an array of huff nodes 
 	   * 	this will be based on letters and freqs from count
@@ -141,23 +109,37 @@ private char[] charArray;
 	   * 6) create a huff node at that nodeindex (aka the second counter)
 	   * 	use parameters create above
 	   */
+	  ArrayList<HuffmanNode> l = new ArrayList<HuffmanNode>();
 	  
-	  ArrayList<HuffmanNode> letters = new ArrayList<HuffmanNode>();
-	  //HuffmanNode[] letters = new HuffmanNode[this.uniqueChars +1];
-	  
-	  int j = 0;
-	  for ( int i = 0; i <count.length; i++) {
-		  if(count[i] != 0) {
-			  
-			  //letters[j] = new HuffmanNode(""+(char)i, Double.parseDouble(""+ count[i]));
-			  j++;
+	  for (int i = 0; i <count.length; i++) {
+		  if (count [i] != 0) {
+			  l.add(new HuffmanNode(""+ (char) i, (double) count[i]));
 		  }
 	  }
+	  HuffmanNode[] huffArray = new HuffmanNode[l.size()];
+	  for (int j = 0; j<l.size(); j++) {
+		  huffArray[j] = l.get(j);
+		  System.out.println((j+1)+": ["+huffArray[j]+"]");
+	  }
 	  
-	  BinaryHeap<HuffmanNode> bheap = new BinaryHeap<HuffmanNode>(letters);
-	  System.out.println(bheap);
+	  BinaryHeap<HuffmanNode> bheap = new BinaryHeap<HuffmanNode>(huffArray);
+	  huffmanTree = HuffmanTree.createFromHeap(bheap);
 	  
-	  this.huffmanTree = huffmanTree.createFromHeap(bheap);
+//	  //ArrayList<HuffmanNode> letters = new ArrayList<HuffmanNode>();
+//	  HuffmanNode[] letters = new HuffmanNode[this.uniqueChars +1];
+////	  
+//	  int j = 0;
+//	  for ( int i = 0; i <count.length; i++) {
+//		  if(count[i] != 0) {
+//			  letters[j] = new HuffmanNode(""+(char)i, Double.parseDouble(""+ count[i]));
+//			  j++;
+//		  }
+//	  }
+//	  
+//	  BinaryHeap<HuffmanNode> bheap = new BinaryHeap<HuffmanNode>(letters);
+//	  System.out.println(bheap);
+//	  
+//	  this.huffmanTree = huffmanTree.createFromHeap(bheap);
   }
  
   /**
@@ -246,7 +228,7 @@ private char[] charArray;
 		   else {
 			   fileString += line;
 		   }
-		   System.out.print(line);
+		   System.out.println(line);
 	  }
 	  return fileString;
 	//return filename;
@@ -260,57 +242,27 @@ private char[] charArray;
    */
   
   public String decodeMessage(String encodedStr) {
-	 HuffmanNode r = this.huffmanTree.root; //get the node
+	  //get the node
 	 String decoded = "";
-	 
-	 for (int i = 0; i < encodedStr.length(); i++) {
-	 	if(encodedStr.charAt(i) == '0') {
-	 		if(r.left != null ) {
-	 			r = r.left;
-	 		}
-		 	else {
-		 		decoded += r.letter;
-		 		r = this.huffmanTree.root;
-		  	}
-	 	}
-	  	else if (encodedStr.charAt(i) == '1'){ //encodedStr.charAt(i) == '1'
-	  		if (r.right != null) {
-	  				r = r.right;
-	  		}
-	  		else {
-	  				decoded += r.letter;
-	  				r = this.huffmanTree.root;
-	  		}
-	  	}
+	 int i=0;
+	 while(i < encodedStr.length()) {
+		 HuffmanNode r = this.huffmanTree.root;
+		 while (r.letter.length() > 1) {
+			 if (encodedStr.charAt(i) == '0') {
+				 r = r.left;
+				 i++;
+			 }
+			 else {
+				 r = r.right;
+				 i++;
+			 }
+		 }
+		 decoded += r.letter;
 	 }
-	  	return decoded;
+	 return decoded;
+	 
   }  
-//  public String decodeMessage(String encodedStr) {	  
-//	  HuffmanNode r = this.huffmanTree.root; //get the node
-//	  String decoded = "";
-//	  
-//	  for (int i = 0; i < encodedStr.length(); i++) {
-//		  if(encodedStr.charAt(i) == '0') {
-//			  if(r.left != null ) {
-//				  r = r.left;
-//			  }
-//			  else {
-//				  decoded += r.letter;
-//				  r = r.left;
-//			  }
-//		  }
-//		  else if (encodedStr.charAt(i) == '1'){ //encodedStr.charAt(i) == '1'
-//			  if (r.right != null) {
-//				  r = r.right;
-//			  }
-//			  else {
-//				  decoded += r.letter;
-//				  r = r.right;
-//			  }
-//		  }
-//	  }
-//	  return decoded;
- // }
+
  
   /**
    * Uses args[0] as the filename, and reads in its contents. Then
@@ -333,7 +285,7 @@ private char[] charArray;
 		   else {
 			   fileString += line;
 		   }
-		   System.out.print(line);
+		   System.out.println(line);
 	   }
 	  
 		 HuffmanConverter converter = new HuffmanConverter(fileString);
