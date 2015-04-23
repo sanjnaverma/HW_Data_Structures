@@ -141,12 +141,15 @@ private char[] charArray;
 	   * 6) create a huff node at that nodeindex (aka the second counter)
 	   * 	use parameters create above
 	   */
-	  HuffmanNode[] letters = new HuffmanNode[this.uniqueChars +1];
+	  
+	  ArrayList<HuffmanNode> letters = new ArrayList<HuffmanNode>();
+	  //HuffmanNode[] letters = new HuffmanNode[this.uniqueChars +1];
 	  
 	  int j = 0;
 	  for ( int i = 0; i <count.length; i++) {
 		  if(count[i] != 0) {
-			  letters[j] = new HuffmanNode(""+(char)i, Double.parseDouble(""+ count[i]));
+			  
+			  //letters[j] = new HuffmanNode(""+(char)i, Double.parseDouble(""+ count[i]));
 			  j++;
 		  }
 	  }
@@ -344,6 +347,9 @@ private char[] charArray;
 		 System.out.println(encodedMessage);
 		 System.out.println("\nThe decoded message:" + "\n");
 		 System.out.println(converter.decodeMessage(encodedMessage));
+		 
+		 System.out.println("Message size in ASCII encoding is "+ converter.contents.length()*8);
+		 System.out.println("Message size of Huffman encoding is "+ encodedMessage.length());
 	  
   }
 }
