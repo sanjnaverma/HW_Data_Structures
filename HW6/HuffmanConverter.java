@@ -269,20 +269,6 @@ private char[] charArray;
    */
   public static void main(String[] args) throws IOException
   {
-//    //call all your methods from here
-//	  BufferedReader in = new BufferedReader(new FileReader("poem.txt"));
-//	   String fileString = "";
-//	   while(true) {
-//		   String line = in.readLine();
-//		   if(line == null) {
-//			   break;
-//		   }
-//		   else {
-//			   fileString += line;
-//			   fileString += '\n';
-//		   }
-//		   System.out.println(line);
-//	   }
 	  	String hi = readContents(args[0]);
 		 HuffmanConverter converter = new HuffmanConverter(hi);
 		 converter.recordFrequencies();
