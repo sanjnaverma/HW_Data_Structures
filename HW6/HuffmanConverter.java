@@ -254,44 +254,23 @@ public class HuffmanConverter {
    * huffman encoding and return it...
    */
   public String decodeMessage(String encodedStr) {
-	  int i = 0;
 	  HuffmanNode r = this.huffmanTree.root; //get the root
-	  String output = " ";
-	  //return treeTraversal(encodedStr, r, i, output);
-	  /**
-	    * 
-	    * @param encodedStr -- the Huffman encoded string
-	    * @param r -- the node -- starts at the root, traverses down.  
-	    * @param i -- recursive algorithm uses this spot to locate where in 
-	    * 	encodedStr it is and traverse respectively
-	    * @param output -- the decoded message that will be returned. 
-	    * @return output
-	    */
+	  String output = "";
 	  
-	  char[] t = encodedStr.toCharArray();
-	  boolean flag = true;
-	  while (flag) {
-		  if (r.letter.length() > 1 && i <encodedStr.length()){
-			  if (t[i] == '0') {
+	  
+	  for (int i = 0; i < encodedStr.length(); i++) {
+		  if(encodedStr.charAt(i) == '0') {
+			  if(r.left != null ) {
 				  r = r.left;
-				  i++;
 			  }
-			  else if (t[i] == '1') {
+		  }
+		  else { //encodedStr.charAt(i) == '1'
+			  if (r.right != null) {
 				  r = r.right;
-				  i++;
 			  }
 		  }
-		  
-		  else if ( i < encodedStr.length()) {
-			  output = output.concat(r.letter);
-			  r = this.huffmanTree.root;
-			  
-		  }
-		  else {
-			  return output;
-		  }
+		  output+= r;
 	  }
-	  
 	  
 	  return output;
   }
@@ -320,8 +299,17 @@ public class HuffmanConverter {
 		   System.out.println(line);
 	   }
 	  
-	   HuffmanConverter converter = new HuffmanConverter(fileString);
-	   converter.recordFrequencies();
+		 HuffmanConverter converter = new HuffmanConverter(fileString);
+		 converter.recordFrequencies();
+		 converter.frequenciesToTree();
+		 converter.treeToCode();
+		 String encodedMessage = converter.encodeMessage();
+		 System.out.print("\nHuffman encoding:" + "\n");
+		 converter.huffmanTree.printLegend();
+		 System.out.println("\n\nHuffman Encoding:");
+		 System.out.println(encodedMessage);
+		 System.out.println("\nThe decoded message:" + "\n");
+		 System.out.println(converter.decodeMessage(encodedMessage));
 	  
   }
 }
