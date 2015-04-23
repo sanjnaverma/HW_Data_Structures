@@ -11,7 +11,6 @@
  * (This always encodes 7-8 bits per character, regardless of that 
  * character’s frequency.)
  *
- *
  * @author sanjnaverma 
  *The text file used will have several lines \n (newline characters) count as 
  *characters, as well as any letters, numbers, spaces, tabs, comma, periods, colons, 
@@ -20,7 +19,6 @@
  *
  *Hence, the frequency of Q is not the same thing as the frequency of q. 
  *Also, the text file must END with a newline character.
- *
  *
  *
  *We can convert integers to characters and vice versa using Java's 
@@ -36,13 +34,11 @@
  */
 
 import java.io.*;
-import java.util.StringTokenizer;
 import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 
 public class HuffmanConverter {
@@ -125,7 +121,6 @@ private char[] charArray;
 	  BinaryHeap<HuffmanNode> bheap = new BinaryHeap<HuffmanNode>(huffArray);
 	  huffmanTree = HuffmanTree.createFromHeap(bheap);
 	  
-//	  //ArrayList<HuffmanNode> letters = new ArrayList<HuffmanNode>();
 //	  HuffmanNode[] letters = new HuffmanNode[this.uniqueChars +1];
 ////	  
 //	  int j = 0;
@@ -199,8 +194,8 @@ private char[] charArray;
 	   * contents.length() and the index to each is (int) contents.charAt(i) s
 	   * o the huffman value of each character is code[(int)contents.charAt(i)]
 	   */
-	  String encoded = "";
-	 for (int i = 0; i <this.count.length; i++) {
+	 String encoded = "";
+	 for (int i = 0; i <this.contents.length(); i++) {
 		 encoded += code[(int) contents.charAt(i)];
 		 
 	 }
@@ -227,6 +222,7 @@ private char[] charArray;
 		   }
 		   else {
 			   fileString += line;
+			   fileString += '\n';
 		   }
 		   System.out.println(line);
 	  }
@@ -259,8 +255,7 @@ private char[] charArray;
 		 }
 		 decoded += r.letter;
 	 }
-	 return decoded;
-	 
+	 return decoded; 
   }  
 
  
@@ -274,33 +269,34 @@ private char[] charArray;
    */
   public static void main(String[] args) throws IOException
   {
-    //call all your methods from here
-	  BufferedReader in = new BufferedReader(new FileReader("poem.txt"));
-	   String fileString = "";
-	   while(true) {
-		   String line = in.readLine();
-		   if(line == null) {
-			   break;
-		   }
-		   else {
-			   fileString += line;
-		   }
-		   System.out.println(line);
-	   }
-	  
-		 HuffmanConverter converter = new HuffmanConverter(fileString);
+//    //call all your methods from here
+//	  BufferedReader in = new BufferedReader(new FileReader("poem.txt"));
+//	   String fileString = "";
+//	   while(true) {
+//		   String line = in.readLine();
+//		   if(line == null) {
+//			   break;
+//		   }
+//		   else {
+//			   fileString += line;
+//			   fileString += '\n';
+//		   }
+//		   System.out.println(line);
+//	   }
+	  	String hi = readContents(args[0]);
+		 HuffmanConverter converter = new HuffmanConverter(hi);
 		 converter.recordFrequencies();
 		 converter.frequenciesToTree();
 		 converter.treeToCode();
 		 String encodedMessage = converter.encodeMessage();
-		 System.out.print("\nHuffman encoding:" + "\n");
+		 System.out.println("\ncharacter encoding:");
 		 converter.huffmanTree.printLegend();
 		 System.out.println("\n\nHuffman Encoding:");
 		 System.out.println(encodedMessage);
 		 System.out.println("\nThe decoded message:" + "\n");
 		 System.out.println(converter.decodeMessage(encodedMessage));
 		 
-		 System.out.println("Message size in ASCII encoding is "+ converter.contents.length()*8);
+		 System.out.println("\n\nMessage size in ASCII encoding is "+ converter.contents.length()*8);
 		 System.out.println("Message size of Huffman encoding is "+ encodedMessage.length());
 	  
   }
